@@ -7,7 +7,7 @@ Hello Yoti people,
 
 A big assumption I am making here is that you are running a Postgres database.
 - Please add your database credentials in [config.py](https://github.com/ralitsaivanova/yoti-cleaner/blob/master/yoti-cleaner/app/config.py)
-- Assuming you are using virtualenv wrapper, please add the [root directory] (https://github.com/ralitsaivanova/yoti-cleaner/tree/master/yoti-cleaner) to your virtualenv
+- Assuming you are using virtualenv wrapper, please add the [root directory](https://github.com/ralitsaivanova/yoti-cleaner/tree/master/yoti-cleaner) to your virtualenv
 - create the database and the table where the input and the output will be persisted by calling
 ```
 python database/create_database.py
