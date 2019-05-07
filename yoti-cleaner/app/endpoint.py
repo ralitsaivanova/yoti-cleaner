@@ -10,7 +10,6 @@ from database.db_conn import conn
 
 from flask import Flask
 app = Flask(__name__)
-
 app.config["APPLICATION_ROOT"] = f"{app.config['APPLICATION_ROOT']}app/"
 
 @app.route("/", methods=['POST',])
@@ -38,22 +37,27 @@ def cleaning():
     result = cleaner.clean_floor(cleaning_instructions)
 
     cleaning_session = (
-        f"{payload['roomSize']},{payload['coords']},{result['coords']}"
-        f"{dirty_patches},{result['patches']},{cleaning_instructions}"
+        room_width, room_length, cleaner_coord_x, cleaner_coord_y,
+        result["coords"][0], result["coords"][1], f"{dirty_patches}",
+        result['patches'], cleaning_instructions
     )
-    _persist_cleaning_request(cleaning_session)
+
+    _persist_cleaning_request(*cleaning_session)
 
     return jsonify(result)
 
 
-def _persist_cleaning_request(cleaning_session):
+def _persist_cleaning_request(*cleaning_session):
     sql = (
-        f"INSERT INTO cleaning_session(room_size,starting_position,"
-        f"final_position,dirty_patches,num_patches_cleaned,instructions)"
-        f"VALUES({cleaning_session})"
+        f"INSERT INTO cleaning_session"
+        f"(room_width,room_length,starting_x,starting_y,final_x,final_y,"
+        f"dirty_patches,num_patches_cleaned,instructions) "
+        f"VALUES{cleaning_session}"
     )
+
     cursor = conn.cursor()
     try:
         cursor.execute(sql)
-    except (Exception, psycopg2.DatabaseError) as error:
+        conn.commit()
+    except (Exception, psycopg2.DatabaseError):
         pass

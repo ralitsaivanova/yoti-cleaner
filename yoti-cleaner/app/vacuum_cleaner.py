@@ -69,10 +69,3 @@ class VacuumCleaner:
         else:
             raise ValueError(
                 "Only positive integers are accepted as coordinates")
-
-
-
-
-
-
-
